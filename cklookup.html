@@ -36,13 +36,18 @@
     <script>
         async function fetchXP() {
             const username = 'cheese knife';
-            const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-            const apiUrl = `${proxyUrl}https://api.wiseoldman.net/v1/players/${username}/xp`;
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(today.getDate() - 1);
+            const startDate = yesterday.toISOString().split('T')[0];
+            const endDate = startDate;
+
+            const apiUrl = `https://api.wiseoldman.net/v2/players/${username}/gained?startdate=${startDate}&enddate=${endDate}`;
 
             try {
                 const response = await fetch(apiUrl);
                 const data = await response.json();
-                const xpYesterday = data.dailyXp[0].xp; // Assuming this is how you get the XP for yesterday
+                const xpYesterday = data.data.skills.overall.experience.Gained;
 
                 let message;
                 if (xpYesterday === 0) {
@@ -55,12 +60,8 @@
                     message = "MY MAN IS CRACKED.";
                 }
 
-                const dateYesterday = new Date();
-                dateYesterday.setDate(dateYesterday.getDate() - 1);
-                const formattedDate = dateYesterday.toLocaleDateString();
-
                 document.getElementById('message').innerText = message;
-                document.getElementById('xp-info').innerText = `XP Earned: ${xpYesterday}\nDate: ${formattedDate}`;
+                document.getElementById('xp-info').innerText = `XP Earned: ${xpYesterday}\nDate: ${startDate}`;
             } catch (error) {
                 console.error('Error fetching XP data:', error);
                 document.getElementById('message').innerText = 'Error fetching XP data.';
