@@ -72,7 +72,7 @@
                 }
 
                 document.getElementById('message').innerText = message;
-                document.getElementById('xp-info').innerText = `XP Earned: ${xpYesterday}\nDate: ${startDate}`;
+                document.getElementById('xp-info').innerText = `XP Earned: ${xpYesterday}\nStart Date: ${startDate}\nEnd Date: ${endDate}`;
             } catch (error) {
                 console.error('Error fetching XP data:', error);
                 document.getElementById('message').innerText = 'Error fetching XP data.';
