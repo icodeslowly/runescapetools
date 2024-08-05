@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSRS Randomizer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Aligns content to the top */
+            height: 100vh;
+            background-color: #121212; /* Dark background */
+            color: #ffffff; /* Light text color */
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .column {
+            margin: 0 20px;
+        }
+        .item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .icon {
+            width: 40px;
+            height: 40px;
+            background-color: #333333; /* Darker icon background */
+            border: 1px solid #555555; /* Darker border */
+            border-radius: 50%;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .icon img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 50%;
+        }
+        .random-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .random-button:hover {
+            background-color: #45a049;
+        }
+        .title {
+            font-size: 2.5em;
+            margin: 0;
+        }
+        .tagline {
+            font-size: 1.2em;
+            color: #bbbbbb; /* Lighter text color for tagline */
+            margin-top: 10px;
+        }
+        .header {
+            margin-top: 20px; /* Space from the top */
+        }
+        .label {
+            color: #cccccc; /* Light text color for labels */
+        }
+        .item-name {
+            color: #ffffff; /* Light text color for item names */
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="title">OSRS Randomizer</div>
+        <div class="tagline">Roll the dice to decide your look. Pick either a sword/shield or the 2h suggestion</div>
+    </div>
+    <br><br><br>
+    <div class="container">
+        <div class="column">
+            <div class="item" id="slot_head">
+                <a href="#" class="icon-link" target="_blank">
+                    <div class="icon">?</div>
+                </a>
+                <div class="label">Head</div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item" id="slot_body">
+                <a href="#" class="icon-link" target="_blank">
+                    <div class="icon">?</div>
+                </a>
+                <div class="label">Body</div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item" id="slot_legs">
+                <a href="#" class="icon-link" target="_blank">
+                    <div class="icon">?</div>
+                </a>
+                <div class="label">Legs</div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item" id="slot_hands">
+                <a href="#" class="icon-link" target="_blank">
+                    <div class="icon">?</div>
+                </a>
+                <div class="label">Hands</div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item" id="slot_feet">
+                <a href="#" class="icon-link" target="_blank">
+                    <div class="icon">?</div>
+                </a>
+                <div class="label">Boots</div>
+                <div class="item-name"></div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="item" id="slot_weapon">
+                <a href="#" class="icon-link" target="_blank">
+                    <div class="icon">?</div>
+                </a>
+                <div class="label">Sword</div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item" id="slot_shield">
+                <a href="#" class="icon-link" target="_blank">
+                    <div class="icon">?</div>
+                </a>
+                <div class="label">Shield</div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item" id="slot_weapon_two">
+                <a href="#" class="icon-link" target="_blank">
+                    <div class="icon">?</div>
+                </a>
+                <div class="label">Two Hand Weapon</div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item" id="slot_neck">
+                <a href="#" class="icon-link" target="_blank">
+                    <div class="icon">?</div>
+                </a>
+                <div class="label">Necklace</div>
+                <div class="item-name"></div>
+            </div>
+            <div class="item" id="slot_cape">
+                <a href="#" class="icon-link" target="_blank">
+                    <div class="icon">?</div>
+                </a>
+                <div class="label">Cape</div>
+                <div class="item-name"></div>
+            </div>
+        </div>
+    </div>
+    <button class="random-button" onclick="randomizeItems()">Randomize Items</button>
+
+    <script>
+        async function randomizeItems() {
+            try {
+                const response = await fetch('items.json');
+                const data = await response.json();
+
+                const slots = {
+                    "slot_head": data.slot_head,
+                    "slot_cape": data.slot_cape,
+                    "slot_neck": data.slot_neck,
+                    "slot_weapon": data.slot_weapon,
+                    "slot_shield": data.slot_shield,
+                    "slot_weapon_two": data.slot_weapon_two,
+                    "slot_body": data.slot_body,
+                    "slot_legs": data.slot_legs,
+                    "slot_hands": data.slot_hands,
+                    "slot_feet": data.slot_feet
+                };
+
+                for (const slot in slots) {
+                    const items = slots[slot];
+                    const randomItem = items[Math.floor(Math.random() * items.length)];
+                    const itemElement = document.getElementById(slot);
+                    const iconElement = itemElement.querySelector('.icon');
+                    const itemNameElement = itemElement.querySelector('.item-name');
+                    const linkElement = itemElement.querySelector('.icon-link');
+
+                    // Clear previous content
+                    iconElement.innerHTML = '';
+                    itemNameElement.innerHTML = '';
+
+                    // Add new content
+                    iconElement.innerHTML = `<img src="${randomItem.img_url}" alt="${randomItem.name}">`;
+                    itemNameElement.innerHTML = `${randomItem.name}`;
+                    linkElement.href = `https://oldschool.runescape.wiki/?search=${encodeURIComponent(randomItem.name)}&title=Special%3ASearch&go=Go`;
+                }
+            } catch (error) {
+                console.error('Error loading items:', error);
+            }
+        }
+    </script>
+</body>
+</html>
