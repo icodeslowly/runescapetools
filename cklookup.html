@@ -58,7 +58,7 @@
             try {
                 const response = await fetch(apiUrl);
                 const data = await response.json();
-                const xpYesterday = data.data.skills.overall.experience.Gained;
+                const xpYesterday = data.data.skills.overall.experience.gained;
 
                 let message;
                 if (xpYesterday === 0) {
