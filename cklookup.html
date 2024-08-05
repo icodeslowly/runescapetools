@@ -53,7 +53,7 @@
             const startDate = formatDate(yesterday);
             const endDate = startDate;
 
-            const apiUrl = `https://api.wiseoldman.net/v2/players/${username}/gained?startdate=${startDate}&enddate=${endDate}`;
+            const apiUrl = `https://api.wiseoldman.net/v2/players/${username}/gained?startDate=${startDate}&endDate=${endDate}`;
 
             try {
                 const response = await fetch(apiUrl);
