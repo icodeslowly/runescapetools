@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fireworks ETA</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        header {
+            text-align: center;
+            margin-top: 20px;
+        }
+        header h1 {
+            font-size: 3em;
+            margin: 0;
+        }
+        header p {
+            font-size: 1.5em;
+            color: #bbbbbb;
+            margin-top: 5px;
+        }
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-top: 20px;
+        }
+        .input-container div {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .input-container label {
+            font-size: 1.2em;
+            margin-right: 10px;
+            min-width: 200px; /* Align labels */
+        }
+        .input-container input {
+            padding: 10px;
+            font-size: 1em;
+            width: 250px; /* Match width of inputs */
+            border-radius: 5px;
+            border: 1px solid #444;
+            background-color: #333;
+            color: #ffffff;
+        }
+        .input-container button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            background-color: #444444;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+        }
+        .input-container button:hover {
+            background-color: #555555;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Fireworks ETA</h1>
+        <p>Find out when you'll ding!</p>
+    </header>
+    <div class="input-container">
+        <div>
+            <label for="currentXP">Current experience:</label>
+            <input type="number" id="currentXP" placeholder="Current experience">
+        </div>
+        <div>
+            <label for="goalXP">Goal experience:</label>
+            <input type="number" id="goalXP" placeholder="Goal experience">
+            <button onclick="setMaxGoal()">Max</button>
+        </div>
+        <div>
+            <label for="xpPerDay">XP goal per day:</label>
+            <input type="number" id="xpPerDay" placeholder="XP goal per day">
+        </div>
+        <button onclick="calculateETA()">Submit</button>
+    </div>
+    <div class="result" id="result"></div>
+
+    <script>
+        function setMaxGoal() {
+            document.getElementById('goalXP').value = 13034000;
+        }
+
+        function calculateETA() {
+            const currentXP = parseFloat(document.getElementById('currentXP').value);
+            const goalXP = parseFloat(document.getElementById('goalXP').value);
+            const xpPerDay = parseFloat(document.getElementById('xpPerDay').value);
+
+            if (isNaN(currentXP) || isNaN(goalXP) || isNaN(xpPerDay) || xpPerDay <= 0) {
+                alert('Please enter valid numbers for all fields.');
+                return;
+            }
+
+            const daysRequired = Math.ceil((goalXP - currentXP) / xpPerDay);
+            const today = new Date();
+            today.setDate(today.getDate() + daysRequired);
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const completionDate = today.toLocaleDateString(undefined, options);
+
+            document.getElementById('result').innerHTML = `
+                You will reach your goal in ${daysRequired} days.<br>
+                Estimated completion date: ${completionDate}.
+            `;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rune Roller</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        header {
+            text-align: center;
+            margin-top: 20px;
+        }
+        header h1 {
+            font-size: 3em;
+        }
+        header p {
+            font-size: 1.5em;
+            color: #bbbbbb;
+        }
+        .input-container {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .input-container input {
+            margin: 10px;
+            padding: 10px;
+            font-size: 1em;
+        }
+        .input-container button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            background-color: #444444;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+        }
+        .input-container button:hover {
+            background-color: #555555;
+        }
+        .task-list {
+            margin: 20px 0;
+            width: 300px;
+            list-style: none;
+            padding: 0;
+        }
+        .task-list li {
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #333333;
+            border-radius: 5px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .task-list .remove-task {
+            margin-left: 10px;
+            cursor: pointer;
+            color: #ff6666;
+        }
+        .highlight {
+            background-color: #ffeb3b !important;
+            color: #000 !important;
+        }
+        .button-container {
+            display: flex;
+            gap: 10px;
+        }
+        .button-container button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+        }
+        .button-container .clear-button {
+            font-size: 0.9em;
+            padding: 10px 20px;
+        }
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background-color: #ffeb3b;
+            border-radius: 50%;
+            opacity: 0;
+            animation: firework 1s ease-out;
+        }
+        @keyframes firework {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(10);
+            }
+        }
+        .example-text {
+            font-size: 0.9em;
+            color: #bbbbbb;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Rune Roller</h1>
+        <p>What should you focus on?</p>
+    </header>
+    <div class="input-container">
+        <input type="text" id="task" placeholder="Enter a task" onkeypress="handleKeyPress(event)">
+        <button onclick="addTask()">Add Task</button>
+    </div>
+    <h2>Potential tasks:</h2>
+    <ul class="task-list" id="taskList"></ul>
+    <div class="button-container">
+        <button onclick="roll()">Roll</button>
+        <button class="clear-button" onclick="clearTasks()">Clear</button>
+    </div>
+    <div class="example-text">
+        Put in the things you'd like to do and roll away! Some suggestions? "Complete 5 Slayer Tasks", "2 Hours Runecrafting", "Hunt 10 Collection Log Slots", etc.
+    </div>
+
+    <script>
+        let tasks = [];
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                addTask();
+            }
+        }
+
+        function addTask() {
+            const taskInput = document.getElementById('task');
+            const task = taskInput.value;
+            if (task) {
+                tasks.push(task);
+                taskInput.value = '';
+                renderTaskList();
+            }
+        }
+
+        function removeTask(index) {
+            tasks.splice(index, 1);
+            renderTaskList();
+        }
+
+        function renderTaskList() {
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = '';
+            tasks.forEach((task, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `${task} <span class="remove-task" onclick="removeTask(${index})">X</span>`;
+                taskList.appendChild(li);
+            });
+        }
+
+        function roll() {
+            if (tasks.length === 0) return;
+            const taskListItems = document.querySelectorAll('.task-list li');
+            let highlightedIndex = 0;
+            const interval = setInterval(() => {
+                taskListItems.forEach(item => item.classList.remove('highlight'));
+                taskListItems[highlightedIndex].classList.add('highlight');
+                highlightedIndex = (highlightedIndex + 1) % tasks.length;
+            }, 100);
+
+            setTimeout(() => {
+                clearInterval(interval);
+                const selectedIndex = Math.floor(Math.random() * tasks.length);
+                taskListItems.forEach(item => item.classList.remove('highlight'));
+                taskListItems[selectedIndex].classList.add('highlight');
+                showFireworks(taskListItems[selectedIndex]);
+            }, 3000);
+        }
+
+        function showFireworks(element) {
+            for (let i = 0; i < 10; i++) {
+                const firework = document.createElement('div');
+                firework.className = 'firework';
+                firework.style.top = `${element.offsetTop + element.offsetHeight / 2}px`;
+                firework.style.left = `${element.offsetLeft + element.offsetWidth / 2}px`;
+                document.body.appendChild(firework);
+                setTimeout(() => {
+                    document.body.removeChild(firework);
+                }, 1000);
+            }
+        }
+
+        function clearTasks() {
+            tasks = [];
+            renderTaskList();
+        }
+    </script>
+</body>
+</html>
