@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XP Check for Cheese Knife</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        .message {
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+        .xp-info {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>XP Check for Cheese Knife</h1>
+        <div id="message" class="message"></div>
+        <div id="xp-info" class="xp-info"></div>
+    </div>
+
+    <script>
+        async function fetchXP() {
+            const username = 'cheese knife';
+            
+            const apiUrl = `https://api.wiseoldman.net/v1/players/${username}/xp`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    headers: {
+                       
+                    }
+                });
+                const data = await response.json();
+                const xpYesterday = data.dailyXp[0].xp; // Assuming this is how you get the XP for yesterday
+
+                let message;
+                if (xpYesterday === 0) {
+                    message = "Typical cheese knife, taking the day off.";
+                } else if (xpYesterday <= 100000) {
+                    message = "Pathetic.";
+                } else if (xpYesterday <= 300000) {
+                    message = "He's doing ok.";
+                } else {
+                    message = "MY MAN IS CRACKED.";
+                }
+
+                const dateYesterday = new Date();
+                dateYesterday.setDate(dateYesterday.getDate() - 1);
+                const formattedDate = dateYesterday.toLocaleDateString();
+
+                document.getElementById('message').innerText = message;
+                document.getElementById('xp-info').innerText = `XP Earned: ${xpYesterday}\nDate: ${formattedDate}`;
+            } catch (error) {
+                console.error('Error fetching XP data:', error);
+                document.getElementById('message').innerText = 'Error fetching XP data.';
+            }
+        }
+
+        fetchXP();
+    </script>
+</body>
+</html>
