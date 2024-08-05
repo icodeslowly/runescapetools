@@ -51,7 +51,7 @@
             };
             
             const startDate = formatDate(yesterday);
-            const endDate = startDate;
+            const endDate = formatDate(today);
 
             const apiUrl = `https://api.wiseoldman.net/v2/players/${username}/gained?startDate=${startDate}&endDate=${endDate}`;
 
