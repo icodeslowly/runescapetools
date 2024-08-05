@@ -36,15 +36,11 @@
     <script>
         async function fetchXP() {
             const username = 'cheese knife';
-            
-            const apiUrl = `https://api.wiseoldman.net/v1/players/${username}/xp`;
+            const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+            const apiUrl = `${proxyUrl}https://api.wiseoldman.net/v1/players/${username}/xp`;
 
             try {
-                const response = await fetch(apiUrl, {
-                    headers: {
-                       
-                    }
-                });
+                const response = await fetch(apiUrl);
                 const data = await response.json();
                 const xpYesterday = data.dailyXp[0].xp; // Assuming this is how you get the XP for yesterday
 
